@@ -51,19 +51,20 @@ server.get("/api/users", (req, res) => {
 
 
 //GET BY UID
-server.get("/api/users/:id", (res, req) => {
-    const id  = req.params.id;
+server.get("/api/users/:id", (req, res) => {
+    const id = req.params.id;
 
     db.findById(id)
         .then(user => {
-            if (user) {
+            console.log(user)
+            if (user => user.id === id) {
                 res.status(200).json(user);  
             } else {
                 res.status(404).json({ errorMessage: "The user with the specified ID does not exist" })
             }
         })
-        .catch(() => {
-            res.status(500).json({ errorMessage: "The user could not be retrieved" })
+        .catch(err => {
+            res.status(500).json({ errorMessage: "The user could not be retrieved", err })
         })
 })
 
@@ -94,7 +95,7 @@ server.delete("/api/users/:id", (req, res) => {
     db.remove(id)
     .then(id => {
         if (user => user.id === id) {
-            res.status(201).json({ message: `User ${id} deleted` });
+            res.status(201).json({ message: `User deleted` });
         } else {
             res.status(404).json({ errorMessage: "The user with the specified ID does not exist"});
         }
